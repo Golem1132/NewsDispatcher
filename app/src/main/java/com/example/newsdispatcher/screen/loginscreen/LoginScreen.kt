@@ -4,10 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
@@ -23,7 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.example.newsdispatcher.R
 import com.example.newsdispatcher.widgets.ElevatedTextField
@@ -37,42 +36,49 @@ fun LoginScreen() {
         mutableStateOf("")
     }
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .padding(top = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             modifier = Modifier
-                .size(120.dp)
+                .weight(1f,false)
                 .clip(CircleShape)
                 .background(color = Color.Blue),
             contentScale = ContentScale.Inside,
             painter = painterResource(id = R.drawable.logo),
             contentDescription = "NewsDispatcher logo"
         )
-        Spacer(modifier = Modifier.height(20.dp))
-        ElevatedTextField(
+        Spacer(modifier = Modifier.height(20.dp).weight(1f, false))
+        ElevatedTextField(modifier = Modifier
+            .weight(1f,false),
             value = loginText, onTextChange = {
                 loginText = it
             }, singleLine = true
         ) {
-            Text(text = "Label here")
+            Text(text = "E-mail")
         }
-        Spacer(modifier = Modifier.height(20.dp))
-        ElevatedTextField(value = passwordText, onTextChange = {
+        Spacer(modifier = Modifier.height(20.dp).weight(1f, false))
+        ElevatedTextField(
+            modifier = Modifier
+                .weight(1f,false),
+            value = passwordText, onTextChange = {
             passwordText = it
         }, singleLine = true) {
-            Text(text = "Label here")
+            Text(text = "Password")
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp).weight(1f, false))
 
-        Button(onClick = { /*TODO*/ }) {
+        Button(
+            modifier = Modifier.weight(1f, false),
+            onClick = { /*TODO*/ }) {
             Text(text = "Log in")
         }
 
     }
 }
 
-@Preview
+@PreviewScreenSizes
 @Composable
 fun PreviewLoginScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {

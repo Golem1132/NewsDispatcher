@@ -3,20 +3,10 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="PreviewLoginScreen">
-        <State>
-          <runningDeviceTargetSelectedWithDropDown>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
-                  <type value="VIRTUAL_DEVICE_PATH" />
-                  <value value="C:\Users\Golem\.android\avd\Pixel_7_API_34.avd" />
-                </Key>
-              </deviceKey>
-            </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-07-21T09:54:31.656147500Z" />
-        </State>
+        <State />
+      </entry>
+      <entry key="PreviewWelcomeScreen">
+        <State />
       </entry>
       <entry key="app">
         <State />
