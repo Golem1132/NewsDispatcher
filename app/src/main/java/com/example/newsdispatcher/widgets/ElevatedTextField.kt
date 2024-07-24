@@ -1,6 +1,7 @@
 package com.example.newsdispatcher.widgets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.defaultMinSize
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -26,6 +28,7 @@ fun ElevatedTextField(
     onTextChange: (String) -> Unit,
     singleLine: Boolean = false,
     readOnly: Boolean = false,
+    error: Boolean = false,
     placeholder: @Composable () -> Unit = {}
 ) {
 
@@ -54,6 +57,11 @@ fun ElevatedTextField(
                         ), shape = RoundedCornerShape(20)
                     )
                     .clip(RoundedCornerShape(20))
+                    .then(
+                        if (error)
+                            Modifier.border(1.dp, Color.Red, RoundedCornerShape(20))
+                        else Modifier
+                    )
                     .padding(start = 8.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
