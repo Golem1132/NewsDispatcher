@@ -16,20 +16,24 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ElevatedText(
+    modifier: Modifier = Modifier,
+    textAlignment: Alignment = Alignment.CenterStart,
     text: String
 ) {
     Surface(
         modifier = Modifier
             .padding(8.dp)
-            .defaultMinSize(280.dp, 56.dp),
+            .defaultMinSize(280.dp, 56.dp)
+            .then(modifier),
         shadowElevation = 1.dp,
-        shape = RoundedCornerShape(50)
+        shape = RoundedCornerShape(20)
     ) {
         Box(
             modifier = Modifier
                 .height(IntrinsicSize.Max)
-                .width(IntrinsicSize.Max),
-            contentAlignment = Alignment.Center
+                .width(IntrinsicSize.Max)
+                .padding(8.dp),
+            contentAlignment = textAlignment
         ) {
             Text(text = text)
         }

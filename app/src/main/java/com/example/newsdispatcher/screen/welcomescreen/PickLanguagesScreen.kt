@@ -27,12 +27,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.newsdispatcher.bottombar.WelcomeScreenBottomBar
 import com.example.newsdispatcher.widgets.ElevatedText
 
+private val languageHashMap: HashMap<String,String> = hashMapOf(
+    "ar" to "Arabic",
+    "de" to "German",
+    "en" to "English",
+    "es" to "Spanish",
+    "fr" to "French",
+    "he" to "Hebrew",
+    "it" to "Italian",
+    "nl" to "Dutch",
+    "no" to "Norwegian",
+    "pt" to "Portugal",
+    "ru" to "Russian",
+    "sv" to "Swedish",
+    "ud" to "",
+    "zh" to "Chinese"
+)
 private val languageArray = arrayOf<String>(
     "English",
     "French",
@@ -108,7 +124,7 @@ fun PickLanguagesScreen() {
     }
 }
 
-@Preview
+@PreviewScreenSizes
 @Composable
 fun PreviewWelcomeScreen() {
     PickLanguagesScreen()
