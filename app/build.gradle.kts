@@ -1,6 +1,9 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -18,6 +21,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        val keystoreFile = project.rootProject.file("apiKeys.properties")
+        val properties = Properties()
+        properties.load(keystoreFile.inputStream())
+        val apiKey = properties.getProperty("API_KEY") ?: "NULL"
+        buildConfigField(
+            type = "String",
+            name = "API_KEY",
+            value = apiKey
+        )
     }
 
     buildTypes {
@@ -38,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -71,4 +84,5 @@ dependencies {
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client.contentNegotiation)
+    implementation(libs.coil)
 }
