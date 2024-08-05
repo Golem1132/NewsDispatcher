@@ -31,7 +31,7 @@ ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp", version.r
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-contentNegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
-coil = { module = "io.coil-kt:coil", version = "2.7.0" }
+coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
