@@ -10,6 +10,7 @@ activityCompose = "1.9.0"
 composeBom = "2024.06.00"
 ktor = "2.3.12"
 serializationPlugin = "1.7.1"
+nav = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +33,7 @@ ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "
 ktor-client-contentNegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
+navigation = {group = "androidx.navigation", name = "navigation-compose", version.ref = "nav"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

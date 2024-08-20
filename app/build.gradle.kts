@@ -85,4 +85,5 @@ dependencies {
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client.contentNegotiation)
     implementation(libs.coil)
+    implementation(libs.navigation)
 }
