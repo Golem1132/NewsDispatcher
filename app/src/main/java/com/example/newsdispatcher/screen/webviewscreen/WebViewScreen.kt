@@ -19,15 +19,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WebViewScreen(url: String) {
+fun WebViewScreen(navController: NavController, url: String) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    Icon(imageVector = Icons.Default.Close, contentDescription = "Close www page")
+                    Icon(imageVector = Icons.Default.Close,
+                        contentDescription = "Close www page",
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
+                        })
                 },
                 title = {
                     Text(
@@ -67,5 +73,8 @@ fun WebViewScreen(url: String) {
 @Preview
 @Composable
 fun PreviewWebViewScreen() {
-    WebViewScreen(url = "https://www.google.com")
+    WebViewScreen(
+        rememberNavController(),
+        url = "https://www.google.com"
+    )
 }

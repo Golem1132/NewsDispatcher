@@ -27,11 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.newsdispatcher.widgets.ElevatedTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CredentialsScreen() {
+fun CredentialsScreen(navController: NavHostController, currentPage: Int?, maxPage: Int?) {
     var emailInput by remember {
         mutableStateOf("")
     }
@@ -47,7 +49,8 @@ fun CredentialsScreen() {
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text(text = "1/x") })
+            if (currentPage != null && maxPage != null)
+                CenterAlignedTopAppBar(title = { Text(text = "$currentPage/$maxPage") })
         },
         bottomBar = {
             BottomAppBar(containerColor = Color.Transparent) {
@@ -55,10 +58,20 @@ fun CredentialsScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        modifier = Modifier.clickable(onClick = { }),
+                        text = "Back",
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
+                        },
+                        fontSize = 5.em,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        modifier = Modifier.clickable(onClick = {
+                            navController.navigate("PersonalInfo")
+                        }),
                         text = "Next", fontSize = 5.em, fontWeight = FontWeight.Bold
                     )
                 }
@@ -74,7 +87,8 @@ fun CredentialsScreen() {
             Text(
                 modifier = Modifier
                     .weight(1f, false),
-                text = "Create account", fontSize = 20.sp)
+                text = "Create account", fontSize = 20.sp
+            )
             Spacer(
                 modifier = Modifier
                     .height(20.dp)
@@ -128,5 +142,5 @@ fun CredentialsScreen() {
 @Preview
 @Composable
 fun PreviewCredentialsScreen() {
-    CredentialsScreen()
+    CredentialsScreen(rememberNavController(), null, null)
 }

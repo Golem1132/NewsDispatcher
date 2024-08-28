@@ -31,11 +31,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.newsdispatcher.R
 import com.example.newsdispatcher.widgets.ElevatedTextField
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     var loginText by rememberSaveable {
         mutableStateOf("")
     }
@@ -95,7 +97,9 @@ fun LoginScreen() {
 
             Button(
                 modifier = Modifier.weight(1f, false),
-                onClick = { /*TODO*/ }) {
+                onClick = {
+                    navController.navigate("feed")
+                }) {
                 Text(text = "Log in")
             }
         }
@@ -122,7 +126,7 @@ fun LoginScreen() {
         ClickableText(text = clickableAnnotatedString) { offset ->
             clickableAnnotatedString.getStringAnnotations("route", offset, offset).firstOrNull()
                 ?.let {
-                    println(it.item)
+                    navController.navigate("createAccount")
                 }
         }
 
@@ -133,6 +137,6 @@ fun LoginScreen() {
 @Composable
 fun PreviewLoginScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {
-        LoginScreen()
+        LoginScreen(rememberNavController())
     }
 }

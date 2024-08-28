@@ -1,6 +1,7 @@
 package com.example.newsdispatcher.screen.accountscreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,17 +26,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountScreen() {
+fun AccountScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
                 navigationIcon = {
                     Icon(
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
+                        },
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Go back"
                     )
@@ -126,5 +132,5 @@ fun AccountScreen() {
 @Preview
 @Composable
 fun PreviewAccountScreen() {
-    AccountScreen()
+    AccountScreen(rememberNavController())
 }

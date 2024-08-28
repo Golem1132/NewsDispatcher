@@ -32,13 +32,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.newsdispatcher.widgets.ElevatedText
 import com.example.newsdispatcher.widgets.ElevatedTextField
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PersonalInfoScreen() {
+fun PersonalInfoScreen(navController: NavHostController, currentPage: Int?, maxPage: Int?) {
     var nameInput by remember {
         mutableStateOf("")
     }
@@ -59,7 +61,11 @@ fun PersonalInfoScreen() {
         mutableStateOf(false)
     }
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text(text = "1/x") }) },
+        topBar = {
+
+            if (currentPage != null && maxPage != null)
+                CenterAlignedTopAppBar(title = { Text(text = "$currentPage/$maxPage") })
+        },
         bottomBar = {
             BottomAppBar(containerColor = Color.Transparent) {
                 Row(
@@ -70,13 +76,17 @@ fun PersonalInfoScreen() {
                 ) {
                     Text(
                         text = "Back",
-                        modifier = Modifier.clickable { },
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
+                        },
                         fontSize = 5.em,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Next",
-                        modifier = Modifier.clickable { },
+                        modifier = Modifier.clickable {
+                            navController.navigate("PickSources")
+                        },
                         fontSize = 5.em,
                         fontWeight = FontWeight.Bold
                     )
@@ -93,7 +103,7 @@ fun PersonalInfoScreen() {
             Text(
                 modifier = Modifier
                     .weight(1f, false),
-                text = "Create account", fontSize = 20.sp
+                text = "Personal info", fontSize = 20.sp
             )
             Spacer(
                 modifier = Modifier
@@ -169,5 +179,5 @@ fun PersonalInfoScreen() {
 @Preview
 @Composable
 fun PreviewPersonalInfoScreen() {
-    PersonalInfoScreen()
+    PersonalInfoScreen(rememberNavController(), null, null)
 }
