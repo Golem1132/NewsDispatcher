@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.em
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.newsdispatcher.R
+import com.example.newsdispatcher.navigation.CreateAccountRoutes
+import com.example.newsdispatcher.navigation.NewsRoutes
 import com.example.newsdispatcher.widgets.ElevatedTextField
 
 @Composable
@@ -98,7 +100,7 @@ fun LoginScreen(navController: NavHostController) {
             Button(
                 modifier = Modifier.weight(1f, false),
                 onClick = {
-                    navController.navigate("feed")
+                    navController.navigate(NewsRoutes.NEWS_SCREEN)
                 }) {
                 Text(text = "Log in")
             }
@@ -126,7 +128,7 @@ fun LoginScreen(navController: NavHostController) {
         ClickableText(text = clickableAnnotatedString) { offset ->
             clickableAnnotatedString.getStringAnnotations("route", offset, offset).firstOrNull()
                 ?.let {
-                    navController.navigate("createAccount")
+                    navController.navigate(CreateAccountRoutes.ROUTE)
                 }
         }
 

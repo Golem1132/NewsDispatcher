@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.newsdispatcher.navigation.LoginRoutes
 import com.example.newsdispatcher.widgets.SourceTile
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +58,7 @@ fun PickSourcesScreen(navController: NavHostController, currentPage: Int?, maxPa
                     Text(
                         text = "Finish",
                         modifier = Modifier.clickable {
-                            navController.navigate("login")
+                            navController.navigate(LoginRoutes.LOGIN_SCREEN)
                         },
                         fontSize = 5.em,
                         fontWeight = FontWeight.Bold

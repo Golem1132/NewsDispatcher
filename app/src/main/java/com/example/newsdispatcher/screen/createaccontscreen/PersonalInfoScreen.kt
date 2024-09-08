@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.newsdispatcher.navigation.CreateAccountRoutes
 import com.example.newsdispatcher.widgets.ElevatedText
 import com.example.newsdispatcher.widgets.ElevatedTextField
 import java.util.Locale
@@ -85,7 +86,7 @@ fun PersonalInfoScreen(navController: NavHostController, currentPage: Int?, maxP
                     Text(
                         text = "Next",
                         modifier = Modifier.clickable {
-                            navController.navigate("PickSources")
+                            navController.navigate(CreateAccountRoutes.PICK_SOURCES_SCREEN)
                         },
                         fontSize = 5.em,
                         fontWeight = FontWeight.Bold

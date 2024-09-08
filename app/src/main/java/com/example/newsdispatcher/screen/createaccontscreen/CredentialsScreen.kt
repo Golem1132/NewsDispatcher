@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.newsdispatcher.navigation.CreateAccountRoutes
 import com.example.newsdispatcher.widgets.ElevatedTextField
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +71,7 @@ fun CredentialsScreen(navController: NavHostController, currentPage: Int?, maxPa
                     )
                     Text(
                         modifier = Modifier.clickable(onClick = {
-                            navController.navigate("PersonalInfo")
+                            navController.navigate(CreateAccountRoutes.PERSONAL_INFO_SCREEN)
                         }),
                         text = "Next", fontSize = 5.em, fontWeight = FontWeight.Bold
                     )

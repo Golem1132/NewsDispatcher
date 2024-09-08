@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.LocalTextStyle
@@ -47,6 +48,7 @@ fun ElevatedTextField(
                 modifier = Modifier
                     .height(IntrinsicSize.Max)
                     .width(IntrinsicSize.Max)
+                    .widthIn(min = 280.dp, max = 280.dp)
                     .shadow(
                         1.dp, RoundedCornerShape(20),
                         false

@@ -18,28 +18,28 @@ import com.example.newsdispatcher.screen.webviewscreen.WebViewScreen
 @Composable
 fun NewsDispatcherNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
+    NavHost(navController = navController, startDestination = LoginRoutes.LOGIN_SCREEN) {
 
-        navigation("credentials", "createAccount") {
-            composable("credentials") {
+        navigation(CreateAccountRoutes.CREDENTIALS_SCREEN, CreateAccountRoutes.ROUTE) {
+            composable(CreateAccountRoutes.CREDENTIALS_SCREEN) {
                 CredentialsScreen(navController, 1, 3)
             }
-            composable("PersonalInfo") {
+            composable(CreateAccountRoutes.PERSONAL_INFO_SCREEN) {
                 PersonalInfoScreen(navController, 2, 3)
             }
-            composable("PickSources") {
+            composable(CreateAccountRoutes.PICK_SOURCES_SCREEN) {
                 PickSourcesScreen(navController, 3, 3)
             }
         }
-        composable("login") {
+        composable(LoginRoutes.LOGIN_SCREEN) {
             LoginScreen(navController)
         }
 
-        composable("feed") {
+        composable(NewsRoutes.NEWS_SCREEN) {
             NewsScreen(navController)
         }
 
-        composable("webView/{url}",
+        composable("${WebViewRoutes.WEB_VIEW_SCREEN}/{url}",
             arguments = listOf(
                 navArgument("url") {
                     type = NavType.StringType
@@ -51,9 +51,10 @@ fun NewsDispatcherNavigation() {
                 url = backstackEntry.arguments?.getString("url") ?: ""
             )
         }
-
-        composable("account") {
-            AccountScreen(navController)
+        navigation(startDestination = AccountRoutes.ACCOUNT_SCREEN, route = AccountRoutes.ROUTE) {
+            composable(AccountRoutes.ACCOUNT_SCREEN) {
+                AccountScreen(navController)
+            }
         }
 
     }
