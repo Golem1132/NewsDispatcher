@@ -1,6 +1,7 @@
 package com.example.newsdispatcher.api
 
 import com.example.newsdispatcher.BuildConfig
+import com.example.newsdispatcher.data.NewsResponse
 import com.example.newsdispatcher.data.SourceResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -54,6 +55,32 @@ class NewsServiceImp(
                         "country",
                         country
                     )
+            }
+        }.body()
+    }
+
+    override suspend fun getTopHeadlines(
+        category: String?,
+        pageSize: Int,
+        page: Int
+    ): NewsResponse {
+        return client.get {
+            url {
+                protocol = URLProtocol.HTTPS
+                host = NewsHttpRoutes.BASE_URL
+                path(NewsHttpRoutes.TOP_HEADLINES)
+                parameters.append(
+                    "apikey",
+                    BuildConfig.API_KEY
+                )
+                parameters.append(
+                    "country",
+                    "us"
+                )
+                if (category != null)
+                    parameters.append("category", category)
+                parameters.append("pageSize", pageSize.toString())
+                parameters.append("page", page.toString())
             }
         }.body()
     }

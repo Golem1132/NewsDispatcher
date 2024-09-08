@@ -37,10 +37,12 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.example.newsdispatcher.model.Article
 
 @Composable
 fun NewsCard(
     modifier: Modifier = Modifier,
+    article: Article,
     onClick: () -> Unit
 ) {
     ElevatedCard(
@@ -53,7 +55,7 @@ fun NewsCard(
                 .fillMaxWidth()
                 .padding(bottom = 10.dp)
         ) {
-            SubcomposeAsyncImage(model = "", contentDescription = "") {
+            SubcomposeAsyncImage(model = article.urlToImage ?: "", contentDescription = "") {
                 when (painter.state) {
                     is AsyncImagePainter.State.Loading -> Box(
                         modifier = Modifier
@@ -115,7 +117,7 @@ fun NewsCard(
             }
             Text(
                 modifier = Modifier.padding(horizontal = 10.dp),
-                text = "Title title title title. Title title title title title. Title titletitle",
+                text = article.title ?: "",
                 style = MaterialTheme.typography.headlineMedium
             )
             Row(

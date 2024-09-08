@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -56,6 +57,7 @@ fun NewsScreen(navController: NavHostController) {
         factory = NewsViewModel.provideFactory()
     )
     val currentCategory = viewModel.currentCategory.collectAsState()
+    val currentNews = viewModel.currentDataset.collectAsState()
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -99,7 +101,8 @@ fun NewsScreen(navController: NavHostController) {
                                 color =
                                 if (currentCategory.value == category.id)
                                     MaterialTheme.colorScheme.primary
-                                else MaterialTheme.colorScheme.inversePrimary, shape = RoundedCornerShape(20)
+                                else MaterialTheme.colorScheme.inversePrimary,
+                                shape = RoundedCornerShape(20)
                             )
                             .padding(10.dp)
                             .clickable {
@@ -122,14 +125,18 @@ fun NewsScreen(navController: NavHostController) {
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(10) {
-                    NewsCard(modifier = Modifier) {
-                        val url = URLEncoder.encode(
-                            "https://www.google.pl",
-                            StandardCharsets.UTF_8.toString()
-                        )
-                        navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
-                    }
+                items(currentNews.value) { article ->
+                    NewsCard(
+                        modifier = Modifier,
+                        article,
+                        onClick = {
+                            val url = URLEncoder.encode(
+                                article.url,
+                                StandardCharsets.UTF_8.toString()
+                            )
+                            navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
+                        }
+                    )
                 }
             }
         }

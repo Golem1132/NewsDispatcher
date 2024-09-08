@@ -1,5 +1,6 @@
 package com.example.newsdispatcher.api
 
+import com.example.newsdispatcher.data.NewsResponse
 import com.example.newsdispatcher.data.SourceResponse
 
 interface NewsService {
@@ -14,5 +15,11 @@ interface NewsService {
         language: String? = null,
         country: String? = null
     ): SourceResponse
+
+    suspend fun getTopHeadlines(
+        category: String?,
+        pageSize: Int,
+        page: Int
+    ): NewsResponse
 
 }

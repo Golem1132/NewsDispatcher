@@ -8,7 +8,7 @@ data class SourceResponse(
     val status: String,
     val code: String? = null,
     val message: String? = null,
-    val sources: Array<Source>
+    val sources: Array<Source> = emptyArray()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
