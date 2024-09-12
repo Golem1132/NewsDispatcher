@@ -3,6 +3,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.roomKsp)
+    alias(libs.plugins.roomPlugin)
     id("org.jetbrains.kotlin.plugin.serialization")
 }
 
@@ -60,6 +62,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    room {
+        schemaDirectory("$projectDir/schema")
+    }
 }
 
 dependencies {
@@ -86,4 +91,8 @@ dependencies {
     implementation(libs.ktor.client.contentNegotiation)
     implementation(libs.coil)
     implementation(libs.navigation)
+    implementation(libs.room.runtime)
+    implementation(libs.room.support)
+    ksp(libs.room.ap)
+
 }

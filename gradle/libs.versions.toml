@@ -11,6 +11,8 @@ composeBom = "2024.06.00"
 ktor = "2.3.12"
 serializationPlugin = "1.7.1"
 nav = "2.7.7"
+roomVer = "2.6.1"
+ksp = "1.9.0-1.0.13"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,8 +36,14 @@ ktor-client-contentNegotiation = { group = "io.ktor", name = "ktor-client-conten
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
 navigation = {group = "androidx.navigation", name = "navigation-compose", version.ref = "nav"}
+room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "roomVer"}
+room-support = {group = "androidx.room", name = "room-ktx", version.ref = "roomVer"}
+room-ap = {module = "androidx.room:room-compiler", version.ref = "roomVer"}
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+roomKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+roomPlugin = { id = "androidx.room", version.ref = "roomVer"}
 
