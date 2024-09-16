@@ -7,10 +7,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.newsdispatcher.database.converter.ArticleConverter
 import com.example.newsdispatcher.database.dao.ArticleEntryDao
+import com.example.newsdispatcher.database.dao.NewsDispatcherRemoteKeysDao
 
 @Database(
     entities = [
-        ArticleEntry::class
+        ArticleEntry::class,
+        NewsDispatcherRemoteKeys::class
     ],
     version = 1,
     exportSchema = true
@@ -19,6 +21,7 @@ import com.example.newsdispatcher.database.dao.ArticleEntryDao
 abstract class NewsDispatcherDatabase : RoomDatabase() {
 
     abstract fun getArticleEntryDao(): ArticleEntryDao
+    abstract fun getNewsDispatcherRemoteKeysDao(): NewsDispatcherRemoteKeysDao
 
     companion object {
         @Volatile

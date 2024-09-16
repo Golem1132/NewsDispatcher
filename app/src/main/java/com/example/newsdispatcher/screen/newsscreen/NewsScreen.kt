@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,6 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -60,7 +62,7 @@ fun NewsScreen(navController: NavHostController) {
         factory = NewsViewModel.provideFactory(LocalContext.current)
     )
     val currentCategory = viewModel.currentCategory.collectAsState()
-    val currentNews = viewModel.currentDataset.collectAsState()
+    val currentNews = viewModel.currentDataset.collectAsLazyPagingItems()
     val currentUiState = viewModel.uiEvent.collectAsState()
     Scaffold(
         topBar = {
@@ -135,13 +137,18 @@ fun NewsScreen(navController: NavHostController) {
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(currentNews.value) { article ->
+                items(
+                    count = currentNews.itemCount,
+                    key = currentNews.itemKey { article -> article.id},
+                    contentType = currentNews.itemContentType { "Articles" }
+                ) { index ->
+                    val item = currentNews[index]!!.article
                     NewsCard(
                         modifier = Modifier,
-                        article,
+                        item,
                         onClick = {
                             val url = URLEncoder.encode(
-                                article.url,
+                                item.url,
                                 StandardCharsets.UTF_8.toString()
                             )
                             navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")

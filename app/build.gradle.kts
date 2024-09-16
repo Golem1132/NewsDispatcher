@@ -94,5 +94,8 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.support)
     ksp(libs.room.ap)
+    implementation(libs.room.paging.integration)
+    implementation(libs.paging.common)
+    implementation(libs.paging.compose.integration)
 
 }

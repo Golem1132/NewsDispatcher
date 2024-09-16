@@ -13,6 +13,7 @@ serializationPlugin = "1.7.1"
 nav = "2.7.7"
 roomVer = "2.6.1"
 ksp = "1.9.0-1.0.13"
+pagingVer = "3.3.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,15 +36,19 @@ ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "
 ktor-client-contentNegotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 coil = { module = "io.coil-kt:coil-compose", version = "2.7.0" }
-navigation = {group = "androidx.navigation", name = "navigation-compose", version.ref = "nav"}
-room-runtime = {group = "androidx.room", name = "room-runtime", version.ref = "roomVer"}
-room-support = {group = "androidx.room", name = "room-ktx", version.ref = "roomVer"}
-room-ap = {module = "androidx.room:room-compiler", version.ref = "roomVer"}
+navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVer" }
+room-support = { group = "androidx.room", name = "room-ktx", version.ref = "roomVer" }
+room-paging-integration = { group = "androidx.room", name = "room-paging", version.ref = "roomVer" }
+room-ap = { module = "androidx.room:room-compiler", version.ref = "roomVer" }
+paging-common = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingVer" }
+paging-compose-integration = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingVer" }
+
 
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 roomKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-roomPlugin = { id = "androidx.room", version.ref = "roomVer"}
+roomPlugin = { id = "androidx.room", version.ref = "roomVer" }
 

@@ -84,4 +84,71 @@ class NewsService(
             ApiOperation.Error(e)
         }
     }
+
+    suspend fun getTopHeadlinesPaged(
+        category: String?,
+        pageSize: Int,
+        page: Int
+    ): NewsResponse {
+        return try {
+            client.get {
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = NewsHttpRoutes.BASE_URL
+                    path(NewsHttpRoutes.TOP_HEADLINES)
+                    parameters.append(
+                        "apikey",
+                        BuildConfig.API_KEY
+                    )
+                    parameters.append(
+                        "country",
+                        "us"
+                    )
+                    if (category != null)
+                        parameters.append("category", category)
+                    parameters.append("pageSize", pageSize.toString())
+                    parameters.append("page", page.toString())
+                }
+            }.body()
+
+        } catch (e: Exception) {
+            NewsResponse(
+                status = "Error",
+                code = "500",
+
+                )
+        }
+    }
+
+    suspend fun getEverything(
+        pageSize: Int,
+        page: Int
+    ): NewsResponse {
+        return try {
+            client.get {
+                url {
+                    protocol = URLProtocol.HTTPS
+                    host = "newsapi.org"
+                    path("v2/everything")
+                    parameters.append(
+                        "apikey",
+                        BuildConfig.API_KEY
+                    )
+                    parameters.append(
+                        "q",
+                        "bitcoin"
+                    )
+                    parameters.append("pageSize", pageSize.toString())
+                    parameters.append("page", page.toString())
+                }
+            }.body()
+
+        } catch (e: Exception) {
+            NewsResponse(
+                status = "Error",
+                code = "500",
+
+                )
+        }
+    }
 }
