@@ -12,7 +12,7 @@ import com.example.newsdispatcher.database.NewsDispatcherRemoteKeys
 
 @OptIn(ExperimentalPagingApi::class)
 class NewsDispatcherMediator(
-    private val category: String?,
+    private val category: String,
     private val api: NewsService,
     private val db: NewsDispatcherDatabase
 ) : RemoteMediator<Int, ArticleEntry>() {
@@ -67,12 +67,13 @@ class NewsDispatcherMediator(
                 if (loadType == LoadType.REFRESH) {
                     println(response.status)
                     if (response.status.equals("ok", true)) {
-                        db.getArticleEntryDao().clearTable()
+                        db.getArticleEntryDao().deleteByCategory(category)
                         db.getNewsDispatcherRemoteKeysDao().deleteAllKeys()
                     }
                 }
                 val articleEntries = response.articles.map { article ->
                     ArticleEntry(
+                        categoryId = category,
                         article = article
                     )
                 }

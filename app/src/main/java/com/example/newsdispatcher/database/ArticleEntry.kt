@@ -9,5 +9,6 @@ import java.util.UUID
 data class ArticleEntry(
     @PrimaryKey(autoGenerate = false)
     val id: String = UUID.randomUUID().toString(),
+    val categoryId: String,
     val article: Article
 )

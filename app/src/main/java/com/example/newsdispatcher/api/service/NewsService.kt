@@ -86,7 +86,7 @@ class NewsService(
     }
 
     suspend fun getTopHeadlinesPaged(
-        category: String?,
+        category: String,
         pageSize: Int,
         page: Int
     ): NewsResponse {
@@ -104,8 +104,7 @@ class NewsService(
                         "country",
                         "us"
                     )
-                    if (category != null)
-                        parameters.append("category", category)
+                    parameters.append("category", category)
                     parameters.append("pageSize", pageSize.toString())
                     parameters.append("page", page.toString())
                 }
@@ -128,7 +127,7 @@ class NewsService(
             client.get {
                 url {
                     protocol = URLProtocol.HTTPS
-                    host = "newsapi.org"
+                    host = NewsHttpRoutes.BASE_URL
                     path("v2/everything")
                     parameters.append(
                         "apikey",
@@ -146,9 +145,8 @@ class NewsService(
         } catch (e: Exception) {
             NewsResponse(
                 status = "Error",
-                code = "500",
-
-                )
+                code = "500"
+            )
         }
     }
 }

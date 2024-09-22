@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class NewsViewModel(private val service: NewsService, private val db: NewsDispatcherDatabase) :
     ViewModel() {
 
-    private val _currentCategory = MutableStateFlow<String?>(null)
+    private val _currentCategory = MutableStateFlow<String>("general")
     val currentCategory = _currentCategory.asStateFlow()
     private var _currentPager = Pager(
         config = PagingConfig(pageSize = 10),
@@ -31,7 +31,7 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
             service, db
         )
     ) {
-        db.getArticleEntryDao().getAllArticles()
+        db.getArticleEntryDao().getAllArticlesByCategory(_currentCategory.value)
     }
     private val _currentDataset = MutableStateFlow(
         _currentPager.flow.cachedIn(viewModelScope)
@@ -41,15 +41,14 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
     private val _uiEvent = MutableStateFlow<NewsScreenEvent>(NewsScreenEvent.LOADING)
     val uiEvent = _uiEvent.asStateFlow()
 
-    fun setCategory(newCategory: String?) {
+    fun setCategory(newCategory: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _currentPager = Pager(
                 config = PagingConfig(pageSize = 10),
                 remoteMediator = NewsDispatcherMediator(newCategory, service, db)
             ) {
-                db.getArticleEntryDao().getAllArticles()
+                db.getArticleEntryDao().getAllArticlesByCategory(newCategory)
             }
-            db.getArticleEntryDao().clearTable()
             db.getNewsDispatcherRemoteKeysDao().deleteAllKeys()
             _currentDataset.emit(_currentPager.flow.cachedIn(viewModelScope))
             _currentCategory.emit(newCategory)
