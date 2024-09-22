@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -139,21 +140,30 @@ fun NewsScreen(navController: NavHostController) {
             ) {
                 items(
                     count = currentNews.itemCount,
-                    key = currentNews.itemKey { article -> article.id},
+                    key = currentNews.itemKey { article -> article.id },
                     contentType = currentNews.itemContentType { "Articles" }
                 ) { index ->
                     val item = currentNews[index]!!.article
-                    NewsCard(
-                        modifier = Modifier,
-                        item,
-                        onClick = {
-                            val url = URLEncoder.encode(
-                                item.url,
-                                StandardCharsets.UTF_8.toString()
-                            )
-                            navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
-                        }
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        NewsCard(
+                            modifier = Modifier,
+                            item,
+                            onClick = {
+                                val url = URLEncoder.encode(
+                                    item.url,
+                                    StandardCharsets.UTF_8.toString()
+                                )
+                                navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
+                            }
+                        )
+                        if (currentNews.itemCount - 1 == index &&
+                            currentNews.loadState.mediator?.append is LoadState.Loading
+                        )
+                            CircularProgressIndicator(modifier = Modifier)
+                    }
                 }
             }
         }
