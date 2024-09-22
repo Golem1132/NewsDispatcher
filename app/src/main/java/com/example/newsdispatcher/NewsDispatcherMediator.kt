@@ -9,10 +9,10 @@ import com.example.newsdispatcher.api.service.NewsService
 import com.example.newsdispatcher.database.ArticleEntry
 import com.example.newsdispatcher.database.NewsDispatcherDatabase
 import com.example.newsdispatcher.database.NewsDispatcherRemoteKeys
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalPagingApi::class)
 class NewsDispatcherMediator(
+    private val category: String?,
     private val api: NewsService,
     private val db: NewsDispatcherDatabase
 ) : RemoteMediator<Int, ArticleEntry>() {
@@ -59,11 +59,10 @@ class NewsDispatcherMediator(
                 }
             }
             println("Making request $loadType")
-            val response = api.getTopHeadlinesPaged(null, 10, page)
+            val response = api.getTopHeadlinesPaged(category, 10, page)
             val endOfPaginationReached = response.articles.isEmpty()
             val prevPage = if (page == 1) null else page - 1
             val nextPage = if (endOfPaginationReached) null else page + 1
-            delay(10000L)
             db.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     println(response.status)

@@ -63,7 +63,7 @@ fun NewsScreen(navController: NavHostController) {
         factory = NewsViewModel.provideFactory(LocalContext.current)
     )
     val currentCategory = viewModel.currentCategory.collectAsState()
-    val currentNews = viewModel.currentDataset.collectAsLazyPagingItems()
+    val currentNews = viewModel.currentDataset.collectAsState().value.collectAsLazyPagingItems()
     val currentUiState = viewModel.uiEvent.collectAsState()
     Scaffold(
         topBar = {
