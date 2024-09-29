@@ -6,9 +6,9 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.newsdispatcher.api.service.NewsService
-import com.example.newsdispatcher.database.ArticleEntry
+import com.example.newsdispatcher.database.data.ArticleEntry
 import com.example.newsdispatcher.database.NewsDispatcherDatabase
-import com.example.newsdispatcher.database.NewsDispatcherRemoteKeys
+import com.example.newsdispatcher.database.data.NewsDispatcherRemoteKeys
 
 @OptIn(ExperimentalPagingApi::class)
 class NewsDispatcherMediator(

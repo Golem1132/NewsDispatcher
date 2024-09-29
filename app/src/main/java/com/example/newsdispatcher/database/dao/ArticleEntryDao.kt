@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.newsdispatcher.database.ArticleEntry
+import com.example.newsdispatcher.database.data.ArticleEntry
 import com.example.newsdispatcher.model.Article
 import kotlinx.coroutines.flow.Flow
 

@@ -3,8 +3,8 @@ package com.example.newsdispatcher.api.service
 import com.example.newsdispatcher.BuildConfig
 import com.example.newsdispatcher.api.ApiOperation
 import com.example.newsdispatcher.api.NewsHttpRoutes
-import com.example.newsdispatcher.data.NewsResponse
-import com.example.newsdispatcher.data.SourceResponse
+import com.example.newsdispatcher.api.data.NewsResponse
+import com.example.newsdispatcher.api.data.SourceResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

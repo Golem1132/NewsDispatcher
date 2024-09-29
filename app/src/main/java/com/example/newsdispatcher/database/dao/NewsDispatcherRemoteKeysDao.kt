@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.newsdispatcher.database.NewsDispatcherRemoteKeys
+import com.example.newsdispatcher.database.data.NewsDispatcherRemoteKeys
 
 @Dao
 interface NewsDispatcherRemoteKeysDao {

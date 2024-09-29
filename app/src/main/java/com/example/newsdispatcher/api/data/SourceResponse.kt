@@ -1,27 +1,25 @@
-package com.example.newsdispatcher.data
+package com.example.newsdispatcher.api.data
 
-import com.example.newsdispatcher.model.Article
+import com.example.newsdispatcher.model.Source
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NewsResponse(
+data class SourceResponse(
     val status: String,
     val code: String? = null,
     val message: String? = null,
-    val totalResults: Int? = null,
-    val articles: Array<Article> = emptyArray()
+    val sources: Array<Source> = emptyArray()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as NewsResponse
+        other as SourceResponse
 
         if (status != other.status) return false
         if (code != other.code) return false
         if (message != other.message) return false
-        if (totalResults != other.totalResults) return false
-        if (!articles.contentEquals(other.articles)) return false
+        if (!sources.contentEquals(other.sources)) return false
 
         return true
     }
@@ -30,8 +28,7 @@ data class NewsResponse(
         var result = status.hashCode()
         result = 31 * result + (code?.hashCode() ?: 0)
         result = 31 * result + (message?.hashCode() ?: 0)
-        result = 31 * result + (totalResults ?: 0)
-        result = 31 * result + (articles.contentHashCode())
+        result = 31 * result + sources.contentHashCode()
         return result
     }
 }

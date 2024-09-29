@@ -12,6 +12,7 @@ import com.example.newsdispatcher.NewsDispatcherMediator
 import com.example.newsdispatcher.api.NewsDispatcherClient
 import com.example.newsdispatcher.api.service.NewsService
 import com.example.newsdispatcher.database.NewsDispatcherDatabase
+import com.example.newsdispatcher.database.data.SearchHistory
 import com.example.newsdispatcher.utils.NewsScreenEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,6 +42,18 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
     private val _uiEvent = MutableStateFlow<NewsScreenEvent>(NewsScreenEvent.LOADING)
     val uiEvent = _uiEvent.asStateFlow()
 
+    private val _searchHistory = MutableStateFlow<List<SearchHistory>>(emptyList())
+    val searchHistory = _searchHistory.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            db.getSearchHistoryDao().getAll().collect {
+                _searchHistory.emit(it)
+            }
+        }
+
+    }
+
     fun setCategory(newCategory: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _currentPager = Pager(
@@ -52,6 +65,12 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
             db.getNewsDispatcherRemoteKeysDao().deleteAllKeys()
             _currentDataset.emit(_currentPager.flow.cachedIn(viewModelScope))
             _currentCategory.emit(newCategory)
+        }
+    }
+
+    fun insertNewSearch(newSearchHistory: SearchHistory) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.getSearchHistoryDao().insert(newSearchHistory)
         }
     }
 
