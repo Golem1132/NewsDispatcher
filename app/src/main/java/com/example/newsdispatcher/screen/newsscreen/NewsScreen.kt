@@ -12,14 +12,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -41,7 +42,6 @@ import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -82,7 +82,6 @@ import com.example.newsdispatcher.widgets.NewsCard
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsScreen(navController: NavHostController) {
     val viewModel: NewsViewModel = viewModel(
@@ -102,81 +101,165 @@ fun NewsScreen(navController: NavHostController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    TextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateContentSize(
-                                animationSpec = tween(5000, easing = LinearOutSlowInEasing)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = if (isSearchActive) 0.dp else 16.dp)
+                    .height(64.dp)
+            ) {
+                TextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .animateContentSize(
+                            animationSpec = tween(5000, easing = LinearOutSlowInEasing)
+                        )
+                        .onFocusChanged {
+                            isSearchActive = it.isFocused
+                        },
+                    placeholder = {
+                        Text(text = "What are you looking for?")
+                    },
+                    shape = if (isSearchActive) RectangleShape else CircleShape,
+                    colors = TextFieldDefaults.colors(
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent
+                    ),
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = ""
+                        )
+                    },
+                    trailingIcon = {
+                        if (isSearchActive)
+                            Icon(imageVector = Icons.Default.Close, contentDescription = "")
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = {
+                        viewModel.insertNewSearch(
+                            SearchHistory(
+                                query = searchQuery,
+                                time = Calendar.getInstance().timeInMillis
                             )
-                            .onFocusChanged {
-                                isSearchActive = it.isFocused
-                            },
-                        placeholder = {
-                            Text(text = "What are you looking for?")
-                        },
-                        shape = if (isSearchActive) RectangleShape else CircleShape,
-                        colors = TextFieldDefaults.colors(
-                            unfocusedIndicatorColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            errorIndicatorColor = Color.Transparent
-                        ),
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = ""
-                            )
-                        },
-                        trailingIcon = {
-                            if (isSearchActive)
-                                Icon(imageVector = Icons.Default.Close, contentDescription = "")
-                        },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                        keyboardActions = KeyboardActions(onSearch = {
-                            viewModel.insertNewSearch(
-                                SearchHistory(
-                                    query = searchQuery,
-                                    time = Calendar.getInstance().timeInMillis
+                        )
+                        TODO("Go to SearchScreen")
+                    }),
+                    value = searchQuery, onValueChange = {
+                        searchQuery = it
+                    }
+                )
+                Crossfade(
+                    targetState = isSearchActive,
+                    label = "Change icons on search bar active"
+                ) { isActive ->
+                    if (!isActive) {
+                        SubcomposeAsyncImage(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .weight(1f)
+                                .clickable {
+                                    navController.navigate(AccountRoutes.ROUTE)
+                                },
+                            model = "", contentDescription = ""
+                        ) {
+                            when (painter.state) {
+                                is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
+                                is AsyncImagePainter.State.Loading -> CircularProgressIndicator()
+                                else -> Icon(
+                                    modifier = Modifier.size(30.dp),
+                                    painter = painterResource(id = R.drawable.baseline_person_24),
+                                    contentDescription = "Placeholder for no photo or error"
                                 )
-                            )
-                            TODO("Go to SearchScreen")
-                        }),
-                        value = searchQuery, onValueChange = {
-                            searchQuery = it
-                        }
-                    )
-                },
-                actions = {
-                    Crossfade(
-                        targetState = isSearchActive,
-                        label = "Change icons on search bar active"
-                    ) { isActive ->
-                        if (!isActive) {
-                            SubcomposeAsyncImage(
-                                modifier = Modifier
-                                    .padding(horizontal = 16.dp)
-                                    .clickable {
-                                        navController.navigate(AccountRoutes.ROUTE)
-                                    },
-                                model = "", contentDescription = ""
-                            ) {
-                                when (painter.state) {
-                                    is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
-                                    is AsyncImagePainter.State.Loading -> CircularProgressIndicator()
-                                    else -> Icon(
-                                        modifier = Modifier.height(intrinsicSize = IntrinsicSize.Max),
-                                        painter = painterResource(id = R.drawable.baseline_person_24),
-                                        contentDescription = "Placeholder for no photo or error"
-                                    )
-                                }
                             }
                         }
                     }
                 }
-            )
+
+            }
+            /*            CenterAlignedTopAppBar(
+                            windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Black),
+                            title = {
+                                TextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .animateContentSize(
+                                            animationSpec = tween(5000, easing = LinearOutSlowInEasing)
+                                        )
+                                        .onFocusChanged {
+                                            isSearchActive = it.isFocused
+                                        },
+                                    placeholder = {
+                                        Text(text = "What are you looking for?")
+                                    },
+                                    shape = if (isSearchActive) RectangleShape else CircleShape,
+                                    colors = TextFieldDefaults.colors(
+                                        unfocusedIndicatorColor = Color.Transparent,
+                                        focusedIndicatorColor = Color.Transparent,
+                                        disabledIndicatorColor = Color.Transparent,
+                                        errorIndicatorColor = Color.Transparent
+                                    ),
+                                    leadingIcon = {
+                                        Icon(
+                                            imageVector = Icons.Default.Search,
+                                            contentDescription = ""
+                                        )
+                                    },
+                                    trailingIcon = {
+                                        if (isSearchActive)
+                                            Icon(imageVector = Icons.Default.Close, contentDescription = "")
+                                    },
+                                    singleLine = true,
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                                    keyboardActions = KeyboardActions(onSearch = {
+                                        viewModel.insertNewSearch(
+                                            SearchHistory(
+                                                query = searchQuery,
+                                                time = Calendar.getInstance().timeInMillis
+                                            )
+                                        )
+                                        TODO("Go to SearchScreen")
+                                    }),
+                                    value = searchQuery, onValueChange = {
+                                        searchQuery = it
+                                    }
+                                )
+                            },
+                            actions = {
+                                Crossfade(
+                                    targetState = isSearchActive,
+                                    label = "Change icons on search bar active"
+                                ) { isActive ->
+                                    if (!isActive) {
+                                        SubcomposeAsyncImage(
+                                            modifier = Modifier
+                                                .padding(horizontal = 16.dp)
+                                                .clickable {
+                                                    navController.navigate(AccountRoutes.ROUTE)
+                                                },
+                                            model = "", contentDescription = ""
+                                        ) {
+                                            when (painter.state) {
+                                                is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
+                                                is AsyncImagePainter.State.Loading -> CircularProgressIndicator()
+                                                else -> Icon(
+                                                    modifier = Modifier.height(intrinsicSize = IntrinsicSize.Max),
+                                                    painter = painterResource(id = R.drawable.baseline_person_24),
+                                                    contentDescription = "Placeholder for no photo or error"
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        )*/
         }, snackbarHost = {
             if (currentUiState.value == NewsScreenEvent.ERROR) {
                 Snackbar {
