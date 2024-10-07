@@ -338,6 +338,7 @@ fun NewsScreen(navController: NavHostController) {
                                     NewsCard(
                                         modifier = Modifier,
                                         item,
+                                        true,
                                         onClick = {
                                             val url = URLEncoder.encode(
                                                 item.url,

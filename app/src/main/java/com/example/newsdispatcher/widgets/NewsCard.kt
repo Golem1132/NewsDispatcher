@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -32,17 +32,20 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
+import com.example.newsdispatcher.R
 import com.example.newsdispatcher.model.Article
 
 @Composable
 fun NewsCard(
     modifier: Modifier = Modifier,
     article: Article,
+    isSaved: Boolean,
     onClick: () -> Unit
 ) {
     ElevatedCard(
@@ -128,12 +131,17 @@ fun NewsCard(
             ) {
                 Icon(
                     modifier = Modifier.size(48.dp),
-                    imageVector = Icons.Default.Favorite, contentDescription = "Save"
+                    painter = painterResource(
+                        id = if (isSaved)
+                            R.drawable.bookmark_24px_filled
+                        else
+                            R.drawable.bookmark_24px
+                    ), contentDescription = "Save"
                 )
                 Icon(
                     modifier = Modifier.size(48.dp),
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = "Save"
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Share"
                 )
             }
         }

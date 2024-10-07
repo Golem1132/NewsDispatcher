@@ -203,6 +203,7 @@ fun SearchScreen(navController: NavController) {
                                     NewsCard(
                                         modifier = Modifier,
                                         item,
+                                        false,
                                         onClick = {
                                             val url = URLEncoder.encode(
                                                 item.url,
