@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface ArticleEntryDao {
 
     @Query("SELECT * FROM ArticleEntry WHERE categoryId =:currentCategory")
-    fun getAllArticlesByCategory(currentCategory: String): PagingSource<Int, ArticleEntry>
+    fun getAllArticlesByCategory(currentCategory: String?): PagingSource<Int, ArticleEntry>
 
     @Query("SELECT article FROM ArticleEntry")
     fun getAllArticlesAsFlow(): Flow<List<Article>>
@@ -21,7 +21,7 @@ interface ArticleEntryDao {
     fun insertArticles(articleEntries: List<ArticleEntry>)
 
     @Query("DELETE FROM ArticleEntry WHERE categoryId=:currentCategory")
-    fun deleteByCategory(currentCategory: String)
+    fun deleteByCategory(currentCategory: String?)
 
     @Query("DELETE FROM ArticleEntry")
     fun clearTable()

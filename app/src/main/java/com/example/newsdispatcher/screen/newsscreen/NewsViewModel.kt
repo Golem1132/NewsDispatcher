@@ -8,9 +8,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.example.newsdispatcher.NewsDispatcherMediator
 import com.example.newsdispatcher.api.NewsDispatcherClient
 import com.example.newsdispatcher.api.service.NewsService
+import com.example.newsdispatcher.data.NewsDispatcherMediator
 import com.example.newsdispatcher.database.NewsDispatcherDatabase
 import com.example.newsdispatcher.database.data.SearchHistory
 import com.example.newsdispatcher.utils.NewsScreenEvent
@@ -29,7 +29,9 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
         config = PagingConfig(pageSize = 10),
         remoteMediator = NewsDispatcherMediator(
             _currentCategory.value,
-            service, db
+            { page ->
+                service.getTopHeadlinesPaged(_currentCategory.value, page)
+            }, db
         )
     ) {
         db.getArticleEntryDao().getAllArticlesByCategory(_currentCategory.value)
@@ -58,7 +60,12 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
         viewModelScope.launch(Dispatchers.IO) {
             _currentPager = Pager(
                 config = PagingConfig(pageSize = 10),
-                remoteMediator = NewsDispatcherMediator(newCategory, service, db)
+                remoteMediator = NewsDispatcherMediator(
+                    newCategory,
+                    { page ->
+                        service.getTopHeadlinesPaged(_currentCategory.value, page)
+                    }, db
+                )
             ) {
                 db.getArticleEntryDao().getAllArticlesByCategory(newCategory)
             }

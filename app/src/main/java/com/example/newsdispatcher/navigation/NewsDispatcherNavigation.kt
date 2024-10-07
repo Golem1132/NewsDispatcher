@@ -13,6 +13,7 @@ import com.example.newsdispatcher.screen.createaccontscreen.PersonalInfoScreen
 import com.example.newsdispatcher.screen.createaccontscreen.PickSourcesScreen
 import com.example.newsdispatcher.screen.loginscreen.LoginScreen
 import com.example.newsdispatcher.screen.newsscreen.NewsScreen
+import com.example.newsdispatcher.screen.searchscreen.SearchScreen
 import com.example.newsdispatcher.screen.webviewscreen.WebViewScreen
 
 @Composable
@@ -55,6 +56,16 @@ fun NewsDispatcherNavigation() {
             composable(AccountRoutes.ACCOUNT_SCREEN) {
                 AccountScreen(navController)
             }
+        }
+
+        composable("${SearchScreenRoutes.SEARCH_SCREEN}/{initialSearch}",
+            arguments = listOf(
+                navArgument("initialSearch") {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            SearchScreen(navController = navController)
         }
 
     }

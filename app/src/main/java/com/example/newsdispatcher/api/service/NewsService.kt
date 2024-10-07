@@ -87,7 +87,6 @@ class NewsService(
 
     suspend fun getTopHeadlinesPaged(
         category: String,
-        pageSize: Int,
         page: Int
     ): NewsResponse {
         return try {
@@ -105,7 +104,7 @@ class NewsService(
                         "us"
                     )
                     parameters.append("category", category)
-                    parameters.append("pageSize", pageSize.toString())
+                    parameters.append("pageSize", "10")
                     parameters.append("page", page.toString())
                 }
             }.body()
@@ -120,7 +119,7 @@ class NewsService(
     }
 
     suspend fun getEverything(
-        pageSize: Int,
+        query: String,
         page: Int
     ): NewsResponse {
         return try {
@@ -135,9 +134,9 @@ class NewsService(
                     )
                     parameters.append(
                         "q",
-                        "bitcoin"
+                        query
                     )
-                    parameters.append("pageSize", pageSize.toString())
+                    parameters.append("pageSize", "10")
                     parameters.append("page", page.toString())
                 }
             }.body()

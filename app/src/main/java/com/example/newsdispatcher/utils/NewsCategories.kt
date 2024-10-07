@@ -2,8 +2,8 @@ package com.example.newsdispatcher.utils
 
 import com.example.newsdispatcher.R
 
-sealed class NewsCategories(val id: String, val title: Int) {
-//    data object All : NewsCategories(null, R.string.category_all)
+sealed class NewsCategories(val id: String?, val title: Int?) {
+    data object Null : NewsCategories(null, null)
     data object Business : NewsCategories("business", R.string.category_business)
     data object Entertainment : NewsCategories("entertainment", R.string.category_entertainment)
     data object General : NewsCategories("general", R.string.category_general)

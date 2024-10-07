@@ -1,19 +1,19 @@
-package com.example.newsdispatcher
+package com.example.newsdispatcher.data
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.example.newsdispatcher.api.service.NewsService
-import com.example.newsdispatcher.database.data.ArticleEntry
+import com.example.newsdispatcher.api.data.NewsResponse
 import com.example.newsdispatcher.database.NewsDispatcherDatabase
+import com.example.newsdispatcher.database.data.ArticleEntry
 import com.example.newsdispatcher.database.data.NewsDispatcherRemoteKeys
 
 @OptIn(ExperimentalPagingApi::class)
 class NewsDispatcherMediator(
-    private val category: String,
-    private val api: NewsService,
+    private val category: String?,
+    private val api: suspend (Int) -> NewsResponse,
     private val db: NewsDispatcherDatabase
 ) : RemoteMediator<Int, ArticleEntry>() {
     override suspend fun load(
@@ -58,8 +58,7 @@ class NewsDispatcherMediator(
                     nextPage
                 }
             }
-            println("Making request $loadType")
-            val response = api.getTopHeadlinesPaged(category, 10, page)
+            val response = api(page)
             val endOfPaginationReached = response.articles.isEmpty()
             val prevPage = if (page == 1) null else page - 1
             val nextPage = if (endOfPaginationReached) null else page + 1

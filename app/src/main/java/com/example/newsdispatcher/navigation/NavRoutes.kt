@@ -26,3 +26,8 @@ object WebViewRoutes {
     const val ROUTE = "WebView"
     const val WEB_VIEW_SCREEN = "WebViewScreen"
 }
+
+object SearchScreenRoutes {
+    const val ROUTE = "Search"
+    const val SEARCH_SCREEN = "SearchScreen"
+}
