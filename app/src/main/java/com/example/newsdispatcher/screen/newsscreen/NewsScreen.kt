@@ -345,6 +345,12 @@ fun NewsScreen(navController: NavHostController) {
                                                 StandardCharsets.UTF_8.toString()
                                             )
                                             navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
+                                        },
+                                        onSaved = {
+
+                                        },
+                                        onShare = { url ->
+
                                         }
                                     )
                                     if (currentNews.itemCount - 1 == index &&

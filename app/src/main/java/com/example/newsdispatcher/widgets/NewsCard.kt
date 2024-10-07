@@ -5,6 +5,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,7 +47,9 @@ fun NewsCard(
     modifier: Modifier = Modifier,
     article: Article,
     isSaved: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onSaved: () -> Unit,
+    onShare: (String) -> Unit
 ) {
     ElevatedCard(
         modifier = modifier,
@@ -130,7 +133,11 @@ fun NewsCard(
                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End)
             ) {
                 Icon(
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clickable {
+                            onSaved()
+                        },
                     painter = painterResource(
                         id = if (isSaved)
                             R.drawable.bookmark_24px_filled
@@ -139,7 +146,11 @@ fun NewsCard(
                     ), contentDescription = "Save"
                 )
                 Icon(
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clickable {
+                            onShare(article.url ?: "")
+                        },
                     imageVector = Icons.Default.Share,
                     contentDescription = "Share"
                 )
