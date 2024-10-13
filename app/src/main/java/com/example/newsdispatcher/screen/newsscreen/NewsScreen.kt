@@ -1,5 +1,6 @@
 package com.example.newsdispatcher.screen.newsscreen
 
+import android.content.Intent
 import android.icu.util.Calendar
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -87,6 +88,7 @@ import java.nio.charset.StandardCharsets
 
 @Composable
 fun NewsScreen(navController: NavHostController) {
+    val context = LocalContext.current
     val viewModel: NewsViewModel = viewModel(
         factory = NewsViewModel.provideFactory(LocalContext.current)
     )
@@ -296,7 +298,13 @@ fun NewsScreen(navController: NavHostController) {
                                             viewModel.doOnSaved(item)
                                         },
                                         onShare = { url ->
-
+                                            val intent = Intent().apply {
+                                                action = Intent.ACTION_SEND
+                                                putExtra(Intent.EXTRA_STREAM, url)
+                                                type = "text/plain"
+                                            }
+                                            val shareIntent = Intent.createChooser(intent, null)
+                                            context.startActivity(shareIntent)
                                         }
                                     )
                                     if (currentNews.itemCount - 1 == index &&
