@@ -79,6 +79,7 @@ import com.example.newsdispatcher.navigation.SearchScreenRoutes
 import com.example.newsdispatcher.navigation.WebViewRoutes
 import com.example.newsdispatcher.utils.NewsCategories
 import com.example.newsdispatcher.utils.NewsScreenEvent
+import com.example.newsdispatcher.widgets.HistoryItem
 import com.example.newsdispatcher.widgets.NewsCard
 import kotlinx.coroutines.delay
 import java.net.URLEncoder
@@ -277,7 +278,15 @@ fun NewsScreen(navController: NavHostController) {
                         Text(text = "Recent search history")
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
                             items(currentSearchHistory.value) {
-                                Text(text = it.query)
+                                HistoryItem(searchHistory = it) {
+                                    viewModel.insertNewSearch(
+                                        SearchHistory(
+                                            query = it.query,
+                                            time = Calendar.getInstance().timeInMillis
+                                        )
+                                    )
+                                    navController.navigate("${SearchScreenRoutes.SEARCH_SCREEN}/${it.query}")
+                                }
                             }
                         }
                     }

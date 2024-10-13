@@ -63,6 +63,7 @@ import com.example.newsdispatcher.R
 import com.example.newsdispatcher.database.data.SearchHistory
 import com.example.newsdispatcher.navigation.AccountRoutes
 import com.example.newsdispatcher.navigation.WebViewRoutes
+import com.example.newsdispatcher.widgets.HistoryItem
 import com.example.newsdispatcher.widgets.NewsCard
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -129,6 +130,7 @@ fun SearchScreen(navController: NavController) {
                             )
                         )
                         currentNews.refresh()
+                        isSearchActive = false
                     }),
                     value = searchQuery.value, onValueChange = {
                         viewModel.updateQuery(it)
@@ -171,7 +173,18 @@ fun SearchScreen(navController: NavController) {
                         Text(text = "Recent search history")
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
                             items(currentSearchHistory.value) {
-                                Text(text = it.query)
+                                HistoryItem(searchHistory = it) {
+                                    viewModel.insertNewSearch(
+                                        SearchHistory(
+                                            query = it.query,
+                                            time = Calendar.getInstance().timeInMillis
+                                        )
+                                    )
+                                    viewModel.updateQuery(it.query)
+                                    currentNews.refresh()
+                                    focusManager.clearFocus()
+                                    isSearchActive = false
+                                }
                             }
                         }
                     }
