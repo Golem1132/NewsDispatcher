@@ -8,16 +8,19 @@ import androidx.room.TypeConverters
 import com.example.newsdispatcher.database.converter.ArticleConverter
 import com.example.newsdispatcher.database.dao.ArticleEntryDao
 import com.example.newsdispatcher.database.dao.NewsDispatcherRemoteKeysDao
+import com.example.newsdispatcher.database.dao.SavedEntryDao
 import com.example.newsdispatcher.database.dao.SearchHistoryDao
 import com.example.newsdispatcher.database.data.ArticleEntry
 import com.example.newsdispatcher.database.data.NewsDispatcherRemoteKeys
+import com.example.newsdispatcher.database.data.SavedEntry
 import com.example.newsdispatcher.database.data.SearchHistory
 
 @Database(
     entities = [
         ArticleEntry::class,
         NewsDispatcherRemoteKeys::class,
-        SearchHistory::class
+        SearchHistory::class,
+        SavedEntry::class
     ],
     version = 1,
     exportSchema = true
@@ -28,6 +31,7 @@ abstract class NewsDispatcherDatabase : RoomDatabase() {
     abstract fun getArticleEntryDao(): ArticleEntryDao
     abstract fun getNewsDispatcherRemoteKeysDao(): NewsDispatcherRemoteKeysDao
     abstract fun getSearchHistoryDao(): SearchHistoryDao
+    abstract fun getSavedEntryDao(): SavedEntryDao
 
     companion object {
         @Volatile

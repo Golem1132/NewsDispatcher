@@ -12,7 +12,9 @@ import com.example.newsdispatcher.api.NewsDispatcherClient
 import com.example.newsdispatcher.api.service.NewsService
 import com.example.newsdispatcher.data.NewsDispatcherMediator
 import com.example.newsdispatcher.database.NewsDispatcherDatabase
+import com.example.newsdispatcher.database.data.SavedEntry
 import com.example.newsdispatcher.database.data.SearchHistory
+import com.example.newsdispatcher.model.Article
 import com.example.newsdispatcher.utils.NewsScreenEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,6 +80,16 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
     fun insertNewSearch(newSearchHistory: SearchHistory) {
         viewModelScope.launch(Dispatchers.IO) {
             db.getSearchHistoryDao().insert(newSearchHistory)
+        }
+    }
+
+    fun doOnSaved(article: Article) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val isInDb = db.getSavedEntryDao().find(article) != null
+            if (isInDb)
+                db.getSavedEntryDao().delete(article)
+            else
+                db.getSavedEntryDao().insert(SavedEntry(article = article))
         }
     }
 

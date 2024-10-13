@@ -42,6 +42,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -79,6 +80,7 @@ import com.example.newsdispatcher.navigation.WebViewRoutes
 import com.example.newsdispatcher.utils.NewsCategories
 import com.example.newsdispatcher.utils.NewsScreenEvent
 import com.example.newsdispatcher.widgets.NewsCard
+import kotlinx.coroutines.delay
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -331,6 +333,13 @@ fun NewsScreen(navController: NavHostController) {
                                 contentType = currentNews.itemContentType { "Articles" }
                             ) { index ->
                                 val item = currentNews[index]!!.article
+                                var xd by remember {
+                                    mutableStateOf(true)
+                                }
+                                LaunchedEffect(key1 = true) {
+                                    delay(10000)
+                                    xd = false
+                                }
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -338,7 +347,7 @@ fun NewsScreen(navController: NavHostController) {
                                     NewsCard(
                                         modifier = Modifier,
                                         item,
-                                        true,
+                                        xd,
                                         onClick = {
                                             val url = URLEncoder.encode(
                                                 item.url,
@@ -347,7 +356,7 @@ fun NewsScreen(navController: NavHostController) {
                                             navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
                                         },
                                         onSaved = {
-
+                                            viewModel.doOnSaved(item)
                                         },
                                         onShare = { url ->
 
