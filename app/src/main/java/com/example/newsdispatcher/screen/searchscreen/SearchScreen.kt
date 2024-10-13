@@ -77,7 +77,9 @@ fun SearchScreen(navController: NavController) {
     var isSearchActive by remember {
         mutableStateOf(false)
     }
-    val searchQuery = viewModel.searchQuery.collectAsState()
+    var searchQuery by remember {
+        mutableStateOf(viewModel.searchQuery)
+    }
     val currentSearchHistory = viewModel.searchHistory.collectAsState()
     val focusManager = LocalFocusManager.current
 
@@ -118,22 +120,30 @@ fun SearchScreen(navController: NavController) {
                     },
                     trailingIcon = {
                         if (isSearchActive)
-                            Icon(imageVector = Icons.Default.Close, contentDescription = "")
+                            Icon(imageVector = Icons.Default.Close,
+                                contentDescription = "Exit search",
+                                modifier = Modifier.clickable {
+                                    searchQuery = viewModel.searchQuery
+                                    focusManager.clearFocus()
+                                    isSearchActive = false
+                                }
+                            )
                     },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                     keyboardActions = KeyboardActions(onSearch = {
                         viewModel.insertNewSearch(
                             SearchHistory(
-                                query = searchQuery.value,
+                                query = searchQuery,
                                 time = Calendar.getInstance().timeInMillis
                             )
                         )
+                        viewModel.updateQuery(searchQuery)
                         currentNews.refresh()
                         isSearchActive = false
                     }),
-                    value = searchQuery.value, onValueChange = {
-                        viewModel.updateQuery(it)
+                    value = searchQuery, onValueChange = {
+                        searchQuery = it
                     }
                 )
                 Crossfade(
@@ -181,6 +191,7 @@ fun SearchScreen(navController: NavController) {
                                         )
                                     )
                                     viewModel.updateQuery(it.query)
+                                    searchQuery = it.query
                                     currentNews.refresh()
                                     focusManager.clearFocus()
                                     isSearchActive = false
@@ -245,8 +256,7 @@ fun SearchScreen(navController: NavController) {
     }
     BackHandler(isSearchActive) {
         isSearchActive = false
-        viewModel.updateQuery("")
+        viewModel.updateQuery(viewModel.searchQuery)
         focusManager.clearFocus()
-
     }
 }

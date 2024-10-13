@@ -28,15 +28,14 @@ class SearchScreenViewModel(
     private val service: NewsService
 ) : ViewModel() {
 
-    private val _searchQuery = MutableStateFlow((savedState["initialSearch"]) ?: "")
-    val searchQuery = _searchQuery.asStateFlow()
+    var searchQuery = (savedState["initialSearch"]) ?: ""
 
     @OptIn(ExperimentalPagingApi::class)
     private var _currentPager = Pager(
         config = PagingConfig(pageSize = 10),
         remoteMediator = NewsDispatcherMediator(
             "",
-            { page -> service.getEverything(_searchQuery.value, page) }, db
+            { page -> service.getEverything(searchQuery, page) }, db
         )
     ) {
         db.getArticleEntryDao().getAllArticlesByCategory("")
@@ -64,11 +63,8 @@ class SearchScreenViewModel(
     }
 
     fun updateQuery(newQuery: String) {
-        viewModelScope.launch {
-            _searchQuery.emit(newQuery)
-        }
+        searchQuery = newQuery
     }
-
 
     companion object {
         fun provideFactory(context: Context): ViewModelProvider.Factory {
