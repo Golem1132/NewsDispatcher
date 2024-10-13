@@ -236,7 +236,7 @@ fun SearchScreen(navController: NavController) {
                                             navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
                                         },
                                         onSaved = {
-
+                                            viewModel.doOnSaved(item)
                                         },
                                         onShare = { url ->
 
