@@ -64,6 +64,12 @@ class SearchScreenViewModel(
         }
     }
 
+    fun deleteSearchEntry(searchHistory: SearchHistory) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.getSearchHistoryDao().delete(searchHistory)
+        }
+    }
+
     fun updateQuery(newQuery: String) {
         searchQuery = newQuery
     }

@@ -1,9 +1,13 @@
 package com.example.newsdispatcher.widgets
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,25 +21,42 @@ import com.example.newsdispatcher.database.data.SearchHistory
 import java.util.Date
 
 @Composable
-fun HistoryItem(modifier: Modifier = Modifier, searchHistory: SearchHistory, onClick: () -> Unit) {
+fun HistoryItem(
+    modifier: Modifier = Modifier, searchHistory: SearchHistory, onClick: () -> Unit,
+    onDeleteClick: () -> Unit
+) {
     Row(
-        modifier = modifier
-            .then(Modifier.clickable {
-                onClick()
-            }), verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
+        Row(
+            modifier = modifier
+                .then(Modifier.clickable {
+                    onClick()
+                }), verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.history_24px),
+                contentDescription = "Search icon"
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = searchHistory.query)
+        }
         Icon(
-            painter = painterResource(id = R.drawable.history_24px),
-            contentDescription = "Search icon"
+            modifier = Modifier.clickable {
+                onDeleteClick()
+            },
+            imageVector = Icons.Default.Close, contentDescription = "Delete"
         )
-        Spacer(modifier = Modifier.width(5.dp))
-        Text(text = searchHistory.query)
     }
-
 }
 
 @PreviewFontScale
 @Composable
 fun PreviewHistoryItem() {
-    HistoryItem(searchHistory = SearchHistory(query = "bitcoin", time = Date().time), onClick = {})
+    HistoryItem(
+        searchHistory = SearchHistory(query = "bitcoin", time = Date().time),
+        onClick = {},
+        onDeleteClick = {})
 }

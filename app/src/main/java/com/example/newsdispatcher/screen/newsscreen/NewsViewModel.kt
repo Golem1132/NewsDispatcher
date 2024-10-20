@@ -83,6 +83,12 @@ class NewsViewModel(private val service: NewsService, private val db: NewsDispat
         }
     }
 
+    fun deleteSearchEntry(searchHistory: SearchHistory) {
+        viewModelScope.launch(Dispatchers.IO) {
+            db.getSearchHistoryDao().delete(searchHistory)
+        }
+    }
+
     fun doOnSaved(article: Article) {
         viewModelScope.launch(Dispatchers.IO) {
             val isInDb = db.getSavedEntryDao().find(article) != null

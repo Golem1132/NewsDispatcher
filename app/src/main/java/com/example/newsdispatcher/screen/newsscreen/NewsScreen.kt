@@ -206,15 +206,19 @@ fun NewsScreen(navController: NavHostController) {
                         Text(text = "Recent search history")
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
                             items(currentSearchHistory.value) {
-                                HistoryItem(searchHistory = it) {
-                                    viewModel.insertNewSearch(
-                                        SearchHistory(
-                                            query = it.query,
-                                            time = Calendar.getInstance().timeInMillis
+                                HistoryItem(searchHistory = it,
+                                    onClick = {
+                                        viewModel.insertNewSearch(
+                                            SearchHistory(
+                                                query = it.query,
+                                                time = Calendar.getInstance().timeInMillis
+                                            )
                                         )
-                                    )
-                                    navController.navigate("${SearchScreenRoutes.SEARCH_SCREEN}/${it.query}")
-                                }
+                                        navController.navigate("${SearchScreenRoutes.SEARCH_SCREEN}/${it.query}")
+                                    },
+                                    onDeleteClick = {
+                                        viewModel.deleteSearchEntry(it)
+                                    })
                             }
                         }
                     }

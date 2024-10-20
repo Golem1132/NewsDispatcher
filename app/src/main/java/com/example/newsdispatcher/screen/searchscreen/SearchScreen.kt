@@ -185,19 +185,23 @@ fun SearchScreen(navController: NavController) {
                         Text(text = "Recent search history")
                         LazyColumn(modifier = Modifier.fillMaxWidth()) {
                             items(currentSearchHistory.value) {
-                                HistoryItem(searchHistory = it) {
-                                    viewModel.insertNewSearch(
-                                        SearchHistory(
-                                            query = it.query,
-                                            time = Calendar.getInstance().timeInMillis
+                                HistoryItem(searchHistory = it,
+                                    onClick = {
+                                        viewModel.insertNewSearch(
+                                            SearchHistory(
+                                                query = it.query,
+                                                time = Calendar.getInstance().timeInMillis
+                                            )
                                         )
-                                    )
-                                    viewModel.updateQuery(it.query)
-                                    searchQuery = it.query
-                                    currentNews.refresh()
-                                    focusManager.clearFocus()
-                                    isSearchActive = false
-                                }
+                                        viewModel.updateQuery(it.query)
+                                        searchQuery = it.query
+                                        currentNews.refresh()
+                                        focusManager.clearFocus()
+                                        isSearchActive = false
+                                    },
+                                    onDeleteClick = {
+                                        viewModel.deleteSearchEntry(it)
+                                    })
                             }
                         }
                     }
