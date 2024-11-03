@@ -1,4 +1,4 @@
-package com.example.newsdispatcher.bottombar
+package com.example.newsdispatcher.appbar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

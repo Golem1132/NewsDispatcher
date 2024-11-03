@@ -5,11 +5,15 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.example.newsdispatcher.database.data.SavedEntry
 import com.example.newsdispatcher.model.Article
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SavedEntryDao {
     @Query("SELECT article FROM SavedEntry")
     suspend fun getAll(): List<Article>
+
+    @Query("SELECT article FROM SavedEntry")
+    fun getAllFlow(): Flow<List<Article>>
 
     @Query("SELECT article FROM SavedEntry WHERE article = :searchedArticle")
     suspend fun find(searchedArticle: Article): Article?

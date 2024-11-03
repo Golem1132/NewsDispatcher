@@ -31,3 +31,8 @@ object SearchScreenRoutes {
     const val ROUTE = "Search"
     const val SEARCH_SCREEN = "SearchScreen"
 }
+
+object FavouriteScreenRoutes {
+    const val ROUTE = "Favourite"
+    const val FAVOURITE_SCREEN = "FavouriteScreen"
+}

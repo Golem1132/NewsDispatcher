@@ -1,20 +1,18 @@
-package com.example.newsdispatcher.screen.searchscreen
+package com.example.newsdispatcher.screen.favouritescreen
 
 import android.content.Intent
-import android.icu.util.Calendar
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,93 +29,59 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import com.example.newsdispatcher.appbar.NewsTopAppBar
-import com.example.newsdispatcher.database.data.SearchHistory
+import com.example.newsdispatcher.model.Article
 import com.example.newsdispatcher.navigation.WebViewRoutes
-import com.example.newsdispatcher.widgets.HistoryItem
 import com.example.newsdispatcher.widgets.NewsCard
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 @Composable
-fun SearchScreen(navController: NavController) {
+fun FavouriteScreen(navController: NavController) {
     val context = LocalContext.current
-    val viewModel: SearchScreenViewModel = viewModel(
-        factory = SearchScreenViewModel.provideFactory(LocalContext.current)
+    val viewModel: FavouriteViewModel = viewModel(
+        factory = FavouriteViewModel.provideFactory(context)
     )
-    val currentNews = viewModel.currentDataset.collectAsState().value.collectAsLazyPagingItems()
+    val savedArticles = viewModel.data.collectAsState()
     var isSearchActive by remember {
         mutableStateOf(false)
     }
-    var searchQuery by remember {
-        mutableStateOf(viewModel.searchQuery)
+    val searchQuery = viewModel.searchQuery.collectAsState()
+    var deleteDialogActive by remember {
+        mutableStateOf(false)
     }
-    val currentSearchHistory = viewModel.searchHistory.collectAsState()
+    var clickedItem: Article? = null
     val focusManager = LocalFocusManager.current
-
     Scaffold(
         topBar = {
             NewsTopAppBar(
                 navController = navController,
                 isActive = isSearchActive,
-                query = searchQuery,
+                query = searchQuery.value,
                 onActiveChange = {
                     isSearchActive = it
                 },
                 onQueryChange = {
-                    searchQuery = it
+                    viewModel.updateQuery(it)
                 },
                 onKeyboardAction = {
-                    viewModel.insertNewSearch(
-                        SearchHistory(
-                            query = searchQuery,
-                            time = Calendar.getInstance().timeInMillis
-                        )
-                    )
-                    viewModel.updateQuery(searchQuery)
-                    currentNews.refresh()
+                    viewModel.updateQuery(searchQuery.value)
+                    viewModel.performSearch()
                     isSearchActive = false
                 },
                 onTrailingIconClick = {
-                    searchQuery = viewModel.searchQuery
+                    viewModel.updateQuery(searchQuery.value)
                     focusManager.clearFocus()
                     isSearchActive = false
                 },
-                hasAction = true
+                hasAction = false
             )
         }
     ) {
         AnimatedContent(targetState = isSearchActive, label = "XD") { isActive ->
             when (isActive) {
                 true -> {
-                    Column(modifier = Modifier.padding(it)) {
-                        Text(text = "Recent search history")
-                        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                            items(currentSearchHistory.value) {
-                                HistoryItem(searchHistory = it,
-                                    onClick = {
-                                        viewModel.insertNewSearch(
-                                            SearchHistory(
-                                                query = it.query,
-                                                time = Calendar.getInstance().timeInMillis
-                                            )
-                                        )
-                                        viewModel.updateQuery(it.query)
-                                        searchQuery = it.query
-                                        currentNews.refresh()
-                                        focusManager.clearFocus()
-                                        isSearchActive = false
-                                    },
-                                    onDeleteClick = {
-                                        viewModel.deleteSearchEntry(it)
-                                    })
-                            }
-                        }
-                    }
+                    Column(modifier = Modifier.padding(it)) {}
                 }
 
                 false -> {
@@ -134,11 +98,8 @@ fun SearchScreen(navController: NavController) {
                             verticalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
                             items(
-                                count = currentNews.itemCount,
-                                key = currentNews.itemKey { article -> article.id },
-                                contentType = currentNews.itemContentType { "Articles" }
-                            ) { index ->
-                                val item = currentNews[index]!!.article
+                                savedArticles.value
+                            ) { item ->
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -154,7 +115,8 @@ fun SearchScreen(navController: NavController) {
                                             navController.navigate("${WebViewRoutes.WEB_VIEW_SCREEN}/$url")
                                         },
                                         onSaved = {
-                                            viewModel.doOnSaved(item)
+                                            clickedItem = item
+                                            deleteDialogActive = true
                                         },
                                         onShare = { url ->
                                             val intent = Intent().apply {
@@ -166,21 +128,36 @@ fun SearchScreen(navController: NavController) {
                                             context.startActivity(shareIntent)
                                         }
                                     )
-                                    if (currentNews.itemCount - 1 == index &&
-                                        currentNews.loadState.mediator?.append is LoadState.Loading
-                                    )
-                                        CircularProgressIndicator(modifier = Modifier)
                                 }
                             }
                         }
                     }
+                    if (deleteDialogActive)
+                        AlertDialog(
+                            onDismissRequest = { deleteDialogActive = false },
+                            confirmButton = {
+                                Text(
+                                    modifier = Modifier.clickable {
+                                        if (clickedItem != null)
+                                            viewModel.delete(clickedItem!!)
+                                        else
+                                            deleteDialogActive = false
+                                    },
+                                    text = "Yes"
+                                )
+                            },
+                            text = {
+                                Text(text = "Delete article?")
+                            }
+                        )
                 }
             }
         }
     }
     BackHandler(isSearchActive) {
         isSearchActive = false
-        viewModel.updateQuery(viewModel.searchQuery)
+        viewModel.updateQuery(searchQuery.value)
         focusManager.clearFocus()
     }
 }
+

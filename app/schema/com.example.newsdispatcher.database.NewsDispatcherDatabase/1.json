@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9c99961bf43f6e418ebe4ae44777f625",
+    "identityHash": "d13d1497268605aff536e48a21175c7a",
     "entities": [
       {
         "tableName": "ArticleEntry",
@@ -99,12 +99,38 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "SavedEntry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `article` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "article",
+            "columnName": "article",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9c99961bf43f6e418ebe4ae44777f625')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd13d1497268605aff536e48a21175c7a')"
     ]
   }
 }

@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.example.newsdispatcher.bottombar.WelcomeScreenBottomBar
+import com.example.newsdispatcher.appbar.WelcomeScreenBottomBar
 import com.example.newsdispatcher.widgets.ElevatedText
 
 private val languageHashMap: HashMap<String,String> = hashMapOf(

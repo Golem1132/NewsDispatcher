@@ -11,6 +11,7 @@ import com.example.newsdispatcher.screen.accountscreen.AccountScreen
 import com.example.newsdispatcher.screen.createaccontscreen.CredentialsScreen
 import com.example.newsdispatcher.screen.createaccontscreen.PersonalInfoScreen
 import com.example.newsdispatcher.screen.createaccontscreen.PickSourcesScreen
+import com.example.newsdispatcher.screen.favouritescreen.FavouriteScreen
 import com.example.newsdispatcher.screen.loginscreen.LoginScreen
 import com.example.newsdispatcher.screen.newsscreen.NewsScreen
 import com.example.newsdispatcher.screen.searchscreen.SearchScreen
@@ -19,7 +20,7 @@ import com.example.newsdispatcher.screen.webviewscreen.WebViewScreen
 @Composable
 fun NewsDispatcherNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = LoginRoutes.LOGIN_SCREEN) {
+    NavHost(navController = navController, startDestination = NewsRoutes.NEWS_SCREEN) {
 
         navigation(CreateAccountRoutes.CREDENTIALS_SCREEN, CreateAccountRoutes.ROUTE) {
             composable(CreateAccountRoutes.CREDENTIALS_SCREEN) {
@@ -66,6 +67,10 @@ fun NewsDispatcherNavigation() {
             )
         ) {
             SearchScreen(navController = navController)
+        }
+
+        composable(route = FavouriteScreenRoutes.FAVOURITE_SCREEN) {
+            FavouriteScreen(navController)
         }
 
     }
